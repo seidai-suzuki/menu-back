@@ -17,16 +17,19 @@ use App\Http\Controllers\RegisterController;
 |
 */
 // auth API
-Route::post('register', [RegisterController::class, 'register']);// ユーザー登録
-Route::post('login', [LoginController::class, 'login']);// ログイン
+Route::post('register', [RegisterController::class, 'register']);
+Route::post('login', [LoginController::class, 'login']);
 
-// menu API
-Route::get('menu', [MenuController::class, 'index']);
-Route::post('menu', [MenuController::class, 'store']);
-Route::get('menu/{id}', [MenuController::class, 'show']);
-Route::put('menu/{id}', [MenuController::class, 'update']);
-Route::delete('menu/{id}', [MenuController::class, 'destroy']);
-
+// user API
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    // menu API
+    Route::get('menu', [MenuController::class, 'index']);
+    Route::post('menu', [MenuController::class, 'store']);
+    Route::get('menu/{id}', [MenuController::class, 'show']);
+    Route::put('menu/{id}', [MenuController::class, 'update']);
+    Route::delete('menu/{id}', [MenuController::class, 'destroy']);
 });
